@@ -4,7 +4,7 @@ on:
     push:
         branches: [master]
         paths:
-            - "content/blog/**"
+            - "content/writings/**"
 
 jobs:
     deploy-portfolio:
