@@ -8,5 +8,5 @@ export default defineEventHandler(async (event) => {
 		)
 		.join("");
 	setHeader(event, "content-type", "application/rss+xml; charset=utf-8");
-	return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Abdullahi Odesanmi — Writings</title><link>${baseUrl}</link><description>Notes on frontend engineering, tools and experiments.</description>${items}</channel></rss>`;
+	return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Abdullahi Odesanmi, writing</title><link>${baseUrl}</link><description>Notes on frontend engineering and what I’m learning.</description>${items}</channel></rss>`;
 });
