@@ -9,6 +9,8 @@ brief: Have you found yourself in a situation where you needed to send emails fr
 
 Have you found yourself in a situation where you needed to send emails from your Nuxt application? With Nuxt's server and Mailgun, sending emails directly from your Nuxt 3 app becomes a breeze.
 
+## Setting up the app
+
 To get started, create a Nuxt 3 app using the following command. Ensure that you have Node.js version 16 or newer installed, along with a text editor and a terminal for running these commands:
 
 ```bash
@@ -29,6 +31,8 @@ code .
 # start the server
 yarn dev or npm run dev
 ```
+
+## The sign-up form
 
 Now that our application is up and running, in this tutorial, we'll implement a straightforward sign-up process and send a welcome email to new users upon successful registration. To achieve this, we'll create a signup form where users can enter their information and submit it.
 
@@ -102,6 +106,8 @@ In the code block above, we declared a reactive `form` state to store user input
 
 Now, if you fill out the form and click the "Sign up" button, your form details will be logged to the console, and an alert dialog will appear, displaying a success message.
 
+## Creating the email endpoint
+
 To send an email to the user's email after a successful signup, we will use Nuxt 3's server directory to create an API endpoint. This endpoint will handle email sending. Follow these steps:
 
 - Create an `api` folder inside the `server` folder at the root of the application.
@@ -122,6 +128,8 @@ export default defineEventHandler(async (event) => {
 	console.log(body);
 });
 ```
+
+## Calling the endpoint from the form
 
 Now that we have created an API endpoint accessible at `/api/email`, let's test it by returning to `app.vue`. In this step, we will make a `POST` request to the endpoint using the `form`'s email and name state as the request body. To make this request, we'll utilize `useFetch`, which is a composable provided by Nuxt.
 
@@ -151,6 +159,8 @@ const handleSubmission = async () => {
 
 Upon submitting the form, you will notice that the name and email are logged to the terminal. Now, let's proceed to send an email to the user's provided email address. To do this, we need to install `mailgun.js` since we will be using Mailgun for sending our emails. If you haven't already, you can create an account with [Mailgun](https://signup.mailgun.com/new/signup) to get started with their email services.
 
+## Getting your Mailgun keys
+
 In this tutorial, we will utilize Mailgun's sandbox domain, which has limitations allowing only authorized email addresses to receive emails. If you wish to send emails to all user email addresses and also connect your domain, consider upgrading your Mailgun account.
 
 - Visit your [Mailgun dashboard](https://app.mailgun.com/app/sending/domains) to copy the domain associated with your Sandbox account.
@@ -170,6 +180,8 @@ Next, we'll need to install `mailgun.js` to handle the email-sending process.
 # Install mailgun.js
 npm i mailgun.js or yarn add mailgun.js
 ```
+
+## Sending the welcome email
 
 In the endpoint file, we will begin by importing `formData` from the `form-data` package in Node.js, as well as `Mailgun` from `mailgun.js`. After the imports, we'll instantiate a Mailgun client by creating a new instance of `Mailgun` and passing `formData` as an argument. Then, using the `mailgun.client` method, we will set up the client with basic authentication credentials, which include the username as 'api' and the API key. The configured client will be assigned to a variable.
 
