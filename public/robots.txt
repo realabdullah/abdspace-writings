@@ -4,3 +4,4 @@ Disallow: /admin
 Disallow: /_studio
 
 Sitemap: https://writings.abdspace.xyz/sitemap.xml
+Sitemap: https://www.abdspace.xyz/sitemap.xml

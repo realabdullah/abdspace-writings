@@ -5,14 +5,31 @@ const studioConfigured = Boolean(config.public.studioConfigured);
 if (studioConfigured) {
 	await navigateTo("/_studio", { redirectCode: 302 });
 }
+
+useSeoMeta({ title: "Admin, Abdullahi Odesanmi", robots: "noindex, nofollow" });
 </script>
 
 <template>
-	<main v-if="!studioConfigured" class="mx-auto flex min-h-screen max-w-xl items-center px-6 py-16">
-		<div>
-			<p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-coral">Authoring unavailable</p>
-			<h1 class="mb-4 text-3xl font-semibold tracking-[-0.04em]">Studio authentication is not configured.</h1>
-			<p class="text-base leading-7 text-ink/65 dark:text-paper/65">Set the GitHub OAuth variables on the production deployment, then redeploy the writings site.</p>
-		</div>
+	<main v-if="!studioConfigured" id="main" class="wrap admin">
+		<p class="mono muted">authoring unavailable</p>
+		<h1 class="admin__title">Studio authentication is not configured.</h1>
+		<p class="muted">Set the GitHub OAuth variables on the production deployment, then redeploy the writings site.</p>
 	</main>
 </template>
+
+<style scoped>
+.admin {
+	display: grid;
+	align-content: center;
+	gap: 1rem;
+	max-width: calc(36rem + var(--gutter) * 2);
+	min-height: 60svh;
+}
+.admin__title {
+	font-weight: 300;
+	font-size: clamp(2rem, 5vw, 2.75rem);
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+	text-wrap: balance;
+}
+</style>

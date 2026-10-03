@@ -1,29 +1,41 @@
+const STORAGE_KEY = "abdspace-theme";
+const THEME_COLORS = { light: "#f4f3ef", dark: "#0f0f0e" };
+
 export const useTheme = () => {
 	const isDark = useState("theme-is-dark", () => false);
 
-	const applyTheme = (dark: boolean) => {
+	const apply = (dark: boolean) => {
 		isDark.value = dark;
-		if (import.meta.client) {
-			document.documentElement.classList.toggle("dark", dark);
-			localStorage.setItem("abdspace-theme", dark ? "dark" : "light");
+		const root = document.documentElement;
+		root.classList.toggle("dark", dark);
+		document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? THEME_COLORS.dark : THEME_COLORS.light);
+		try {
+			localStorage.setItem(STORAGE_KEY, dark ? "dark" : "light");
+		} catch {
+			/* storage can be unavailable in private windows */
 		}
 	};
 
-	const toggleTheme = (origin?: HTMLElement) => {
-		if (!import.meta.client) return applyTheme(!isDark.value);
-		const nextIsDark = !isDark.value;
-		const rect = origin?.getBoundingClientRect();
-		document.documentElement.style.setProperty("--theme-x", `${rect ? rect.left + rect.width / 2 : window.innerWidth - 32}px`);
-		document.documentElement.style.setProperty("--theme-y", `${rect ? rect.top + rect.height / 2 : window.innerHeight - 32}px`);
-		document.documentElement.dataset.themeTransition = nextIsDark ? "grow" : "shrink";
-		if (document.startViewTransition) document.startViewTransition(() => applyTheme(nextIsDark));
-		else applyTheme(nextIsDark);
+	/** Sync state with the class the inline head script already set. */
+	const hydrate = () => {
+		isDark.value = document.documentElement.classList.contains("dark");
 	};
 
-	if (import.meta.client && !document.documentElement.dataset.themeReady) {
-		applyTheme(localStorage.getItem("abdspace-theme") === "dark");
-		document.documentElement.dataset.themeReady = "true";
-	}
+	/** Night falls in columns, top-down and right to left; day rises back the other way. */
+	const toggle = () => {
+		const next = !isDark.value;
+		const root = document.documentElement;
+		const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-	return { isDark, applyTheme, toggleTheme };
+		if (!document.startViewTransition || reduceMotion) {
+			apply(next);
+			return;
+		}
+
+		root.dataset.shift = next ? "dusk" : "dawn";
+		const transition = document.startViewTransition(() => apply(next));
+		transition.finished.finally(() => delete root.dataset.shift);
+	};
+
+	return { isDark, hydrate, toggle };
 };
